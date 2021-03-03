@@ -2,7 +2,7 @@
     <div>
         <div class="list-group">
             <div v-for="todo in todos" v-bind:key="todo.id" class="list-group-item">
-                <span>{{ todo.title }}</span>
+                <span v-bind:class="{'is-completed': todo.completed}">{{ todo.title }}</span>
             </div>
         </div>
     </div>
@@ -18,5 +18,7 @@ export default {
 </script>
 
 <style>
-
+.is-completed {
+    text-decoration: line-through;
+}
 </style>
