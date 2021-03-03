@@ -1,6 +1,5 @@
 <template>
     <div>
-        <h1>Todos component</h1>
         <TodosList v-bind:todos="listTodos"></TodosList>
     </div>
 </template>
