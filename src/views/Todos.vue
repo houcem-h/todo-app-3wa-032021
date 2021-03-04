@@ -1,6 +1,8 @@
 <template>
     <div>
-        <TodosList v-bind:todos="listTodos"></TodosList>
+        <TodosList
+            v-bind:todos="listTodos"
+            @del-todo="deleteTodo"></TodosList>
     </div>
 </template>
 
@@ -10,6 +12,15 @@ export default {
     name: 'Todos',
     components: {
         TodosList
+    },
+    methods: {
+        deleteTodo: function(id) {
+            this.listTodos = this.listTodos.filter(function(todo) {
+                return todo.id !== id
+            });
+            // ou bien
+            // this.listTodos = this.listTodos.filter(todo => todo.id !== id);
+        }
     },
     data() {
         return {
