@@ -1,5 +1,6 @@
 <template>
     <div>
+        <AddTodo @add-new-todo="insertNewTodo"></AddTodo>
         <TodosList
             v-bind:todos="listTodos"
             @del-todo="deleteTodo"></TodosList>
@@ -8,10 +9,12 @@
 
 <script>
 import TodosList from './../components/TodosList'
+import AddTodo from "./../components/AddTodo";
 export default {
     name: 'Todos',
     components: {
-        TodosList
+        TodosList,
+        AddTodo
     },
     methods: {
         deleteTodo: function(id) {
@@ -20,6 +23,11 @@ export default {
             });
             // ou bien
             // this.listTodos = this.listTodos.filter(todo => todo.id !== id);
+        },
+        insertNewTodo: function(newTodo) {
+            const long = this.listTodos.length
+            newTodo.id = this.listTodos[long-1].id +1;
+            this.listTodos.push(newTodo);
         }
     },
     data() {
