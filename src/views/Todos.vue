@@ -1,9 +1,18 @@
 <template>
     <div>
         <AddTodo @add-new-todo="insertNewTodo"></AddTodo>
-        <TodosList
-            v-bind:todos="listTodos"
-            @del-todo="deleteTodo"></TodosList>
+        <div v-if="loading">
+            <div class="d-flex justify-content-center">
+                <div class="spinner-border" role="status">
+                    <span class="sr-only">Loading...</span>
+                </div>
+            </div>
+        </div>
+        <div v-else>
+            <TodosList
+                v-bind:todos="listTodos"
+                @del-todo="deleteTodo"></TodosList>
+        </div>
     </div>
 </template>
 
@@ -71,7 +80,8 @@ export default {
                     completed: true
                 }
             ],
-            listTodos: []
+            listTodos: [],
+            loading: true
         }
     },
     mounted() {
@@ -79,6 +89,7 @@ export default {
             .then(res => {
                 // console.log(res.data)
                 this.listTodos = res.data
+                this.loading = false
             })
             .catch(function (err) { 
                 console.log(err)
