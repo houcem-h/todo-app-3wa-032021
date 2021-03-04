@@ -8,6 +8,8 @@
 </template>
 
 <script>
+import axios from 'axios';
+
 import TodosList from './../components/TodosList'
 import AddTodo from "./../components/AddTodo";
 export default {
@@ -26,13 +28,13 @@ export default {
         },
         insertNewTodo: function(newTodo) {
             const long = this.listTodos.length
-            newTodo.id = this.listTodos[long-1].id +1;
+            newTodo.id = long === 0 ? 1 : this.listTodos[long-1].id +1;
             this.listTodos.push(newTodo);
         }
     },
     data() {
         return {
-            listTodos: [
+            oldListTodos: [
                 {
                     id: 1,
                     title: 'Todo One',
@@ -58,8 +60,21 @@ export default {
                     title: 'Todo Five',
                     completed: true
                 }
-            ]
+            ],
+            listTodos: []
         }
+    },
+    mounted() {
+        axios.get('https://jsonplaceholder.typicode.com/todos?_limit=10')
+            .then(res => {
+                // console.log(res.data)
+                this.listTodos = res.data
+            })
+            .catch(function (err) { 
+                console.log(err)
+             })
+            //  ou bien
+            //  .catch(err => console.log(err))
     }
 }
 </script>

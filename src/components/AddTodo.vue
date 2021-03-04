@@ -4,7 +4,7 @@
           <input v-model="newTitle" type="text" placeholder="Add new todo ..." class="form-control">
           <div class="input-group-append">
               <button type="submit"
-              :disabled="newTitle === ''"
+                :disabled="newTitle === ''"
                 class="btn btn-outline-primary"
                 >Add</button>
           </div>
