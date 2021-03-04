@@ -3,7 +3,10 @@
       <div class="input-group mb-3">
           <input v-model="newTitle" type="text" placeholder="Add new todo ..." class="form-control">
           <div class="input-group-append">
-              <button type="submit" class="btn btn-outline-primary">Add</button>
+              <button type="submit"
+              :disabled="newTitle === ''"
+                class="btn btn-outline-primary"
+                >Add</button>
           </div>
       </div>
   </form>
@@ -25,6 +28,7 @@ export default {
                 completed: false
             }
             this.$emit('add-new-todo', newTodo);
+            this.newTitle = '';
         }
     }
 }
