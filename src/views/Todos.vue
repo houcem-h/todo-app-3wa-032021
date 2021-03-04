@@ -20,16 +20,26 @@ export default {
     },
     methods: {
         deleteTodo: function(id) {
-            this.listTodos = this.listTodos.filter(function(todo) {
-                return todo.id !== id
-            });
-            // ou bien
             // this.listTodos = this.listTodos.filter(todo => todo.id !== id);
+            // ou bien
+            // this.listTodos = this.listTodos.filter(function(todo) {
+            //     return todo.id !== id
+            // });
+            // on remplace le filter direct dans le tableau par un DELETE request avec axios
+            axios.delete('https://jsonplaceholder.typicode.com/todos/'+id)
+                .then(() => this.listTodos = this.listTodos.filter(todo => todo.id !== id))
+                .catch(err => console.log(err))
         },
         insertNewTodo: function(newTodo) {
+
             const long = this.listTodos.length
             newTodo.id = long === 0 ? 1 : this.listTodos[long-1].id +1;
-            this.listTodos.push(newTodo);
+            
+            // this.listTodos.push(newTodo);
+            // on remplace le push direct dans le tableau par un POST request avec axios
+            axios.post('https://jsonplaceholder.typicode.com/todos', newTodo)
+                .then( () => this.listTodos.push(newTodo) )
+                .catch(err => console.log(err))
         }
     },
     data() {
