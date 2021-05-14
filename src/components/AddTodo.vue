@@ -23,7 +23,7 @@ export default {
     methods: {
         sendNewTodo() {
             const newTodo = {
-                id: null,
+                // id: null,
                 title: this.newTitle,
                 completed: false
             }

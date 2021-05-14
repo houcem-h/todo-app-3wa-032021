@@ -17,11 +17,11 @@
 </template>
 
 <script>
-import axios from 'axios';
 
 import TodosList from './../components/TodosList'
 import AddTodo from "./../components/AddTodo";
-import { getListTodos } from "./../firebase";
+import todosCollection from "./../firebase";
+
 export default {
     name: 'Todos',
     components: {
@@ -30,26 +30,22 @@ export default {
     },
     methods: {
         deleteTodo: function(id) {
-            // this.listTodos = this.listTodos.filter(todo => todo.id !== id);
-            // ou bien
-            // this.listTodos = this.listTodos.filter(function(todo) {
-            //     return todo.id !== id
-            // });
-            // on remplace le filter direct dans le tableau par un DELETE request avec axios
-            axios.delete('https://jsonplaceholder.typicode.com/todos/'+id)
-                .then(() => this.listTodos = this.listTodos.filter(todo => todo.id !== id))
-                .catch(err => console.log(err))
+            todosCollection.doc(id).delete().then(() => {
+                console.log("Document successfully deleted!");
+                this.$swal('Task deleted successfuly');
+            }).catch((error) => {
+                console.error("Error removing document: ", error);
+            });
         },
         insertNewTodo: function(newTodo) {
-
-            const long = this.listTodos.length
-            newTodo.id = long === 0 ? 1 : this.listTodos[long-1].id +1;
-            
-            // this.listTodos.push(newTodo);
-            // on remplace le push direct dans le tableau par un POST request avec axios
-            axios.post('https://jsonplaceholder.typicode.com/todos', newTodo)
-                .then( () => this.listTodos.push(newTodo) )
-                .catch(err => console.log(err))
+            todosCollection.add(newTodo)
+            .then((docRef) => {
+                console.log("Document written with ID: ", docRef.id);
+                this.$swal(newTodo.title + ' added successfuly');
+            })
+            .catch((error) => {
+                console.error("Error adding document: ", error);
+            });
         }
     },
     data() {
@@ -81,24 +77,26 @@ export default {
                     completed: true
                 }
             ],
-            listTodos: [],
+            listTodos: Array,
             loading: true
         }
     },
     mounted() {
-        this.listTodos = getListTodos();
-        this.loading = false
-        // axios.get('https://jsonplaceholder.typicode.com/todos?_limit=10')
-        //     .then(res => {
-        //         // console.log(res.data)
-        //         this.listTodos = res.data
-        //         this.loading = false
-        //     })
-        //     .catch(function (err) { 
-        //         console.log(err)
-        //      })
-            //  ou bien
-            //  .catch(err => console.log(err))
+            todosCollection.onSnapshot((querySnapshot) => {
+                this.listTodos =  [],
+                querySnapshot.forEach((doc) => {
+                    const todo = doc.data();
+                    todo.id = doc.id;
+                    this.listTodos.push(todo);
+                });
+            //  todosCollection.get().then((querySnapshot) => {
+            //     querySnapshot.forEach((doc) => {
+            //         const todo = doc.data();
+            //         todo.id = doc.id;
+            //         this.listTodos.push(todo);
+            //     });
+                this.loading = false
+            })
     }
 }
 </script>

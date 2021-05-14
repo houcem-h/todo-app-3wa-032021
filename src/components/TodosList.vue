@@ -24,6 +24,7 @@
 </template>
 
 <script>
+import todosCollection from "./../firebase";
 export default {
     name: 'TodosList',
     props: {
@@ -31,7 +32,16 @@ export default {
     },
     methods: {
         toggleCompleted: function(todo) {
-            todo.completed = !todo.completed;
+            todosCollection.doc(todo.id).update({
+                completed: !todo.completed
+            })
+            .then(() => {
+                console.log("Document successfully updated!");
+            })
+            .catch((error) => {
+                // The document probably doesn't exist.
+                console.error("Error updating document: ", error);
+            });
         }
     }
 }
