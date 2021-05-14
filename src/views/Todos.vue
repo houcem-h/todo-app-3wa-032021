@@ -21,6 +21,7 @@ import axios from 'axios';
 
 import TodosList from './../components/TodosList'
 import AddTodo from "./../components/AddTodo";
+import { getListTodos } from "./../firebase";
 export default {
     name: 'Todos',
     components: {
@@ -85,15 +86,17 @@ export default {
         }
     },
     mounted() {
-        axios.get('https://jsonplaceholder.typicode.com/todos?_limit=10')
-            .then(res => {
-                // console.log(res.data)
-                this.listTodos = res.data
-                this.loading = false
-            })
-            .catch(function (err) { 
-                console.log(err)
-             })
+        this.listTodos = getListTodos();
+        this.loading = false
+        // axios.get('https://jsonplaceholder.typicode.com/todos?_limit=10')
+        //     .then(res => {
+        //         // console.log(res.data)
+        //         this.listTodos = res.data
+        //         this.loading = false
+        //     })
+        //     .catch(function (err) { 
+        //         console.log(err)
+        //      })
             //  ou bien
             //  .catch(err => console.log(err))
     }
