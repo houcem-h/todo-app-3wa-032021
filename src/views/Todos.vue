@@ -29,19 +29,32 @@ export default {
         AddTodo
     },
     methods: {
-        deleteTodo: function(id) {
-            todosCollection.doc(id).delete().then(() => {
-                console.log("Document successfully deleted!");
-                this.$swal('Task deleted successfuly');
-            }).catch((error) => {
-                console.error("Error removing document: ", error);
-            });
+        deleteTodo: function(todo) {
+            this.$swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    todosCollection.doc(todo.id).delete().then(() => {
+                        console.log("Document successfully deleted!");
+                        this.$swal.fire('Deleted!', todo.title + ' has been deleted.', 'success')
+                    }).catch((error) => {
+                        console.error("Error removing document: ", error);
+                    });
+                }
+            })
         },
         insertNewTodo: function(newTodo) {
             todosCollection.add(newTodo)
             .then((docRef) => {
                 console.log("Document written with ID: ", docRef.id);
-                this.$swal(newTodo.title + ' added successfuly');
+                this.$swal.fire('Added!', newTodo.title + ' has been added.', 'success')
+                // this.$swal(newTodo.title + ' added successfuly');
             })
             .catch((error) => {
                 console.error("Error adding document: ", error);

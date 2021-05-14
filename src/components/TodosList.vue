@@ -14,7 +14,7 @@
                     {{ todo.title }}
                 </span>
                 <button
-                    @click="$emit('del-todo', todo.id)"
+                    @click="$emit('del-todo', todo)"
                     class="badge badge-danger badge-pill float-right"
                     >X</button>
 
