@@ -22,3 +22,7 @@ yarn lint
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
+
+
+### Firebase hosting
+https://todoapp-vue-052021.web.app/#/todos
